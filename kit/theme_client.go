@@ -142,6 +142,35 @@ func CreateTheme(name, zipLocation string) (ThemeClient, Theme, error) {
 	return client, theme, err
 }
 
+// Themes will list all the themes the credentials have access to. It will try
+// and load the config so that flags don't have to be passed in all the time.
+func Themes(configPath, environment string) ([]Theme, error) {
+	environments, err := LoadEnvironments(configPath)
+	if err != nil {
+		return []Theme{}, err
+	}
+
+	config, exists := environments[environment]
+	if !exists {
+		return []Theme{}, fmt.Errorf("%s does not exist in this environments list", environment)
+	}
+	config.compile()
+
+	err = config.validateNoThemeID()
+	if err != nil {
+		return []Theme{}, fmt.Errorf("Invalid options: %v", err)
+	}
+
+	client, err := NewThemeClient(config)
+	if err != nil {
+		return []Theme{}, err
+	}
+
+	resp, respErr := client.httpClient.GetThemes()
+
+	return resp.Themes, respErr
+}
+
 // CreateAsset will take an asset and will return  when the asset has been created.
 // If there was an error, in the request then error will be defined otherwise the
 //response will have the appropropriate data for usage.

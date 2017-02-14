@@ -19,6 +19,7 @@ type ShopifyResponse struct {
 	URL       *url.URL     `json:"url"`
 	Code      int          `json:"status_code"`
 	Theme     Theme        `json:"theme"`
+	Themes    []Theme      `json:"themes"`
 	Asset     Asset        `json:"asset"`
 	Assets    []Asset      `json:"assets"`
 	EventType EventType    `json:"event_type"`

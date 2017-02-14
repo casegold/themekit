@@ -54,11 +54,6 @@ func newHTTPClient(config *Configuration) (*httpClient, error) {
 // AdminURL will return the url to the shopify admin.
 func (client *httpClient) AdminURL() string {
 	adminURL := fmt.Sprintf("%s/admin", client.config.Domain)
-	if !client.config.IsLive() {
-		if themeID, err := strconv.ParseInt(client.config.ThemeID, 10, 64); err == nil {
-			adminURL = fmt.Sprintf("%s/themes/%d", adminURL, themeID)
-		}
-	}
 	parsedURL, _ := url.Parse(adminURL)
 	parsedURL.Scheme = "https"
 	// for testing, because otherwise the domain should not be localhost or http
@@ -68,9 +63,19 @@ func (client *httpClient) AdminURL() string {
 	return parsedURL.String()
 }
 
+func (client *httpClient) AssetAdminURL() string {
+	adminURL := client.AdminURL()
+	if !client.config.IsLive() {
+		if themeID, err := strconv.ParseInt(client.config.ThemeID, 10, 64); err == nil {
+			adminURL = fmt.Sprintf("%s/themes/%d", adminURL, themeID)
+		}
+	}
+	return adminURL
+}
+
 // AssetPath will return the assets endpoint in the admin section of shopify.
 func (client *httpClient) AssetPath() string {
-	return fmt.Sprintf("%s/assets.json", client.AdminURL())
+	return fmt.Sprintf("%s/assets.json", client.AssetAdminURL())
 }
 
 // ThemesPath will return the endpoint of the themes interactions.
@@ -101,6 +106,10 @@ func (client *httpClient) NewTheme(name, source string) (*ShopifyResponse, Error
 	return client.sendJSON(themeRequest, Create, client.ThemesPath(), map[string]interface{}{
 		"theme": Theme{Name: name, Source: source, Role: "unpublished"},
 	})
+}
+
+func (client *httpClient) GetThemes() (*ShopifyResponse, Error) {
+	return client.sendRequest(themeRequest, Retrieve, client.ThemesPath(), nil)
 }
 
 func (client *httpClient) GetTheme(themeID int64) (*ShopifyResponse, Error) {

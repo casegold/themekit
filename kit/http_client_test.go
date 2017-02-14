@@ -48,19 +48,25 @@ func (suite *HTTPClientTestSuite) TestNewHttpClient() {
 
 func (suite *HTTPClientTestSuite) TestAdminURL() {
 	assert.Equal(suite.T(),
-		fmt.Sprintf("https://%s/admin/themes/%v", suite.config.Domain, suite.config.ThemeID),
+		fmt.Sprintf("https://%s/admin", suite.config.Domain),
 		suite.client.AdminURL())
+}
+
+func (suite *HTTPClientTestSuite) TestAssetAdminURL() {
+	assert.Equal(suite.T(),
+		fmt.Sprintf("https://%s/admin/themes/%v", suite.config.Domain, suite.config.ThemeID),
+		suite.client.AssetAdminURL())
 
 	suite.client.config.ThemeID = "live"
 
 	assert.Equal(suite.T(),
 		fmt.Sprintf("https://%s/admin", suite.config.Domain),
-		suite.client.AdminURL())
+		suite.client.AssetAdminURL())
 }
 
 func (suite *HTTPClientTestSuite) TestAssetPath() {
 	assert.Equal(suite.T(),
-		fmt.Sprintf("%s/assets.json", suite.client.AdminURL()),
+		fmt.Sprintf("%s/assets.json", suite.client.AssetAdminURL()),
 		suite.client.AssetPath())
 }
 

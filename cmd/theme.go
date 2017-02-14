@@ -115,7 +115,7 @@ func init() {
 
 	updateCmd.Flags().StringVar(&updateVersion, "version", "latest", "version of themekit to install")
 
-	ThemeCmd.AddCommand(bootstrapCmd, removeCmd, replaceCmd, uploadCmd, watchCmd, downloadCmd, versionCmd, updateCmd, configureCmd, openCmd)
+	ThemeCmd.AddCommand(listCmd, bootstrapCmd, removeCmd, replaceCmd, uploadCmd, watchCmd, downloadCmd, versionCmd, updateCmd, configureCmd, openCmd)
 }
 
 func generateThemeClients() ([]kit.ThemeClient, error) {

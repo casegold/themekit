@@ -33,7 +33,7 @@ func (suite *BootstrapTestSuite) TestBootstrap() {
 		responses++
 	}))
 	defer server.Close()
-	timberFeedPath = server.URL + "/feed"
+	themeFeedPath = server.URL + "/feed"
 	themeZipRoot = server.URL + "/zip"
 
 	err := bootstrap()
@@ -60,7 +60,7 @@ func (suite *BootstrapTestSuite) TestGetZipPath() {
 		bytes, _ := ioutil.ReadAll(file)
 		fmt.Fprintf(w, string(bytes))
 	}))
-	timberFeedPath = server.URL
+	themeFeedPath = server.URL
 
 	bootstrapVersion = "master"
 	path, err := getZipPath()
@@ -79,7 +79,7 @@ func (suite *BootstrapTestSuite) TestGetZipPath() {
 func (suite *BootstrapTestSuite) TestGetThemeName() {
 	bootstrapPrefix = "prEfix"
 	bootstrapVersion = "4.2.0"
-	assert.Equal(suite.T(), "prEfixTimber-4.2.0", getThemeName())
+	assert.Equal(suite.T(), "prEfixSlate-4.2.0", getThemeName())
 
 	bootstrapURL = "http://github.com/shopify/theme.zip"
 	assert.Equal(suite.T(), "prEfixtheme", getThemeName())
@@ -103,7 +103,7 @@ func (suite *BootstrapTestSuite) TestZipPathForVersion() {
 		bytes, _ := ioutil.ReadAll(file)
 		fmt.Fprintf(w, string(bytes))
 	}))
-	timberFeedPath = server.URL
+	themeFeedPath = server.URL
 
 	path, err := zipPathForVersion("master")
 	assert.Equal(suite.T(), themeZipRoot+"master.zip", path)
@@ -123,7 +123,7 @@ func (suite *BootstrapTestSuite) TestZipPathForVersion() {
 		w.WriteHeader(404)
 		fmt.Fprintf(w, "404")
 	}))
-	timberFeedPath = server.URL
+	themeFeedPath = server.URL
 
 	path, err = zipPathForVersion("v2.0.2")
 	assert.Equal(suite.T(), "", path)
@@ -137,7 +137,7 @@ func (suite *BootstrapTestSuite) TestDownloadAtomFeed() {
 		bytes, _ := ioutil.ReadAll(file)
 		fmt.Fprintf(w, string(bytes))
 	}))
-	timberFeedPath = server.URL
+	themeFeedPath = server.URL
 
 	feed, err := downloadAtomFeed()
 	assert.Nil(suite.T(), err)
@@ -147,7 +147,7 @@ func (suite *BootstrapTestSuite) TestDownloadAtomFeed() {
 	server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "not atom")
 	}))
-	timberFeedPath = server.URL
+	themeFeedPath = server.URL
 
 	feed, err = downloadAtomFeed()
 	assert.NotNil(suite.T(), err)
@@ -158,7 +158,7 @@ func (suite *BootstrapTestSuite) TestDownloadAtomFeed() {
 		w.WriteHeader(404)
 		fmt.Fprintf(w, "404")
 	}))
-	timberFeedPath = server.URL
+	themeFeedPath = server.URL
 
 	feed, err = downloadAtomFeed()
 	assert.NotNil(suite.T(), err)
@@ -184,7 +184,7 @@ func (suite *BootstrapTestSuite) TestFindReleaseWith() {
 func (suite *BootstrapTestSuite) TestBuildInvalidVersionError() {
 	feed := loadAtom()
 	err := buildInvalidVersionError(feed, "nope")
-	assert.Equal(suite.T(), "invalid Timber Version: nope\nAvailable Versions Are:\n- master\n- latest\n- v2.0.2\n- v2.0.1\n- v2.0.0\n- v1.3.2\n- v1.3.1\n- v1.3.0\n- v1.2.1\n- v1.2.0\n- v1.1.3\n- v1.1.2\n- v1.1.1\n- v1.1.0\n- v1.0.0", err.Error())
+	assert.Equal(suite.T(), "invalid Slate Version: nope\nAvailable Versions Are:\n- master\n- latest\n- v2.0.2\n- v2.0.1\n- v2.0.0\n- v1.3.2\n- v1.3.1\n- v1.3.0\n- v1.2.1\n- v1.2.0\n- v1.1.3\n- v1.1.2\n- v1.1.1\n- v1.1.0\n- v1.0.0", err.Error())
 }
 
 func TestBootstrapTestSuite(t *testing.T) {

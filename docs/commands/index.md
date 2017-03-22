@@ -39,9 +39,9 @@ To get your credentials setup please refer to [the setup docs]({{ '/#get-api-acc
 
 **Optional Flags**
 
-* `--version` : With the version flag you can specify the version of Timber to use.
+* `--version` : With the version flag you can specify the version of Slate to use.
 * `--prefix` : You can add a prefix to the theme name on Shopify. (i.e. `--prefix=mine`
-  will create a theme called `mine-Timber-latest`)
+  will create a theme called `mine-Slate-latest`)
 * `--url` : You can provide a url to a zip file of a theme that you have access to.
   This allows you to create an initial theme from your own template.
 * `--name` : Defines the name of the theme on the shopify admin. This flag is recommended

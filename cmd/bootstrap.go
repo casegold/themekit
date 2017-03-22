@@ -17,14 +17,14 @@ const (
 )
 
 var (
-	themeZipRoot   = "https://github.com/Shopify/Timber/archive/"
-	timberFeedPath = "https://github.com/Shopify/Timber/releases.atom"
+	themeZipRoot  = "https://github.com/Shopify/slate/archive/"
+	themeFeedPath = "https://github.com/Shopify/slate/releases.atom"
 )
 
 var bootstrapCmd = &cobra.Command{
 	Use:   "bootstrap",
-	Short: "Bootstrap a new theme using Shopify Timber",
-	Long: `Bootstrap will download the latest release of Timber,
+	Short: "Bootstrap a new theme using Shopify Slate",
+	Long: `Bootstrap will download the latest release of Slate,
 The most popular theme on Shopify. Bootstrap will also setup
 your config file and create a new theme id for you.
 
@@ -89,7 +89,7 @@ func getThemeName() string {
 		return bootstrapPrefix + strings.Replace(parts[len(parts)-1], ".zip", "", 1)
 	}
 
-	return bootstrapPrefix + "Timber-" + bootstrapVersion
+	return bootstrapPrefix + "Slate-" + bootstrapVersion
 }
 
 func zipPathForVersion(version string) (string, error) {
@@ -115,7 +115,7 @@ func zipPath(version string) string {
 }
 
 func downloadAtomFeed() (atom.Feed, error) {
-	resp, err := http.Get(timberFeedPath)
+	resp, err := http.Get(themeFeedPath)
 	if err != nil {
 		return atom.Feed{}, err
 	}
@@ -147,7 +147,7 @@ func buildInvalidVersionError(feed atom.Feed, version string) error {
 		entries = append(entries, entry.Title)
 	}
 
-	return fmt.Errorf(`invalid Timber Version: %s
+	return fmt.Errorf(`invalid Slate Version: %s
 Available Versions Are:
 - %s`, version, strings.Join(entries, "\n- "))
 }
